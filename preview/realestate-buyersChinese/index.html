@@ -1,0 +1,263 @@
+
+<!--Real Estate – Acquire Oversea Buyers (Simplified Chinese) Version 01.18.15
+
+ - Added Hidden Field Spam Check
+
+-->
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>美国买房</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link href='http://fonts.googleapis.com/css?family=Droid+Serif:700,400' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+        <link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="shortcut icon" href="favicon.ico">
+
+		 <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+    </head>
+    <body>
+      <div class="wrap">
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+        <div class="main container">
+            <img class="seal" src="img/seal.png" width="144" height="143">
+            <div class="headline row">
+                <h1 class="col-md-12 strong text-center">美国买房，建立您美丽的家园</h1><!--END headline-->
+            </div><!--END row-->
+            <div class="information row">
+                <div class="col-md-6 guaranteed">
+                  <div class="row">
+                        <div class="contact alert">
+                          <div class="profilePic col-md-5">
+                            <img class="img-thumbnail pull-left" src="img/broker.jpg" width="190">
+                            <img class="img pull-left" src="img/brokage.jpg" width="190">
+                          </div>
+                          <div class="contactDetails col-md-7 text-center">
+                            <h3>Stephanie Dolly</h3>
+                            <h3>(时代范尼 • 多利)</h3>
+                            <p>美国王牌地产经纪代理</p>
+                            <h3>202-555-0162</h3>
+                            <p><a href="mailto:youremail@yourdomain.com?subject=New Lead From Your Landing Page">stephanie@coldwellbanker.com</a></p>
+                          </div>
+                          <div class="clearfix"></div>
+                       </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="row-fluid">
+                    <div class="col-sm-12">
+                      <p><strong>在全球楼市当中，美国楼市最受中国购房者关注。</strong>2014年7月，美国楼市强劲回暖，房价中位数达到17.48万美元，同比增长6.5%，创下2014年涨幅最高值。但相对于07年全美房价中位数最高点19.63万美元仍有较大距离，楼市“抄底行情仍在持续”，<strong>当前进入美国楼市无疑是比较好的时机。</strong>国人对于人民币升值的预期，以及国内房地产的风险，还有国内经商环境的恶化以及中国高净值人士对于财富的不安全感，正促使了中国购房者前往海外房产市场扩张。</p>
+                      
+                      <p>我具有丰富的海外投资经验，拥有庞大与及时的信息来源，可以为您详细解答一切关于海外投资与买房的问题。同我们合作是您最佳的选择。</p>
+                    </div>
+                  </div>
+                </div> 
+            </div>
+            <div style="float:left; position:relative; width:100%; height:712px;">
+            <div class="mainContent row" style="height:712px;">
+
+              
+                <div class="clearfix"></div>
+            </div>
+              <div class="form col-md-5 col-sm-12 pull-right" style="position:absolute; top:16px; right:0;">
+
+                    <div class="header text-center">
+                        <h2 class="offer">心动不如行动</h2>
+                        <p>免费为您展示新上市房屋，量身为您设计购买方案</p>
+                    </div><!--END header-->
+
+                    <div class="body">
+                        <!--contact form begin-->
+                        <form action="" method="POST" id="">
+                          <div class="errors alert alert-danger"><?= $error ?>请输入您的</div>
+ 
+                          <p>您的联络方式：</p>
+
+                          <div class="fullName">
+                            <input class="fullNameInput clearMeFocus" type="text" size="4" value="姓名">
+                          </div>
+
+                          <div class="phone">
+                            <input class="phoneInput clearMeFocus" type="text" size="4" value="电话">
+                          </div>
+
+                          <div class="email">
+                            <input class="emailInput clearMeFocus" type="text" size="20" value="电子邮箱"/>
+                          </div>
+
+                          <div class="weChat margin-bottom">
+                            <input class="weChatInput clearMeFocus" type="text" size="20" value="微信号（不是必须填写）"/>
+                          </div>
+
+                          <p>您的情况：</p>
+
+                          <div class="country">
+                            <select class="form-control countryInput" type="text">
+                              <option>现长期居住</option>
+                              <option>中国</option>
+                              <option>美国</option>
+                              <option>其他国家</option>
+                            </select>
+                          </div>
+
+                          <div class="price">
+                            <select class="form-control priceInput" type="text">
+                              <option>理想价位</option>
+                              <option><$200,000</option>
+                              <option>$200,000 - $399,999</option>
+                              <option>$400,000 - $599,999</option>
+                              <option>$600,000 - $799,999</option>
+                              <option>$800,000 - $999,999</option>
+                              <option>>$1,000,000</option>
+                            </select>
+                          </div>
+
+                          <div class="area">
+                            <select class="form-control areaInput" type="text">
+                              <option>理想居住地区</option>
+                              <option>曼哈顿</option>
+                              <option>布鲁克林</option>
+                              <option>皇后区</option>
+                              <option>长岛</option>
+                              <option>其他</option>
+                            </select>
+                          </div>
+
+                          <div class="familyMember margin-bottom">
+                            <input class="familyMemberInput clearMeFocus" type="text" size="20" value="家里人数（不是必须填写）"/>
+                          </div>
+
+                          <div class="clearfix"></div>
+
+                          <button type="button" class="btn btn-primary">联络经纪人<img src="img/loader.gif" width="16" height="11" alt="please wait..."></button>
+                        </form>
+                        <!--stripe form end-->
+                    </div><!--END body-->
+
+                </div><!--END form-->
+            </div><!--END mainContent-->
+              <div class="clearfix"></div>
+            <section class="section1 row">
+              <div class="col-md-4">
+                <img src="img/classroom.jpg" alt="education" class="img-circle pull-left">
+                <p><strong>教育优良，学费全免。</strong>美国今天的繁荣与强大，事实上是得力于教育之普及和教育制度的完善。美国实行十年义务教育，公立由政府税收支持，学生免费入学。教育观念方面，注重从小对学生的开发，培养学生的智力与能力，两者之间更注重能力的开发，十分推崇个性发展，强调个性化和协作精神的结合，鼓励学生积极思考而不是死记硬背来积累知识，更重视学生掌握知识的广度。学生在轻松愉快的气氛中学习，乐于提问，和探讨问题的活跃思维。</p>
+              </div>
+              <div class="col-md-4">
+                <img src="img/baby.jpg" alt="" class="img-circle pull-left">
+                <p><strong>食品安全。</strong>从科学的角度来说，安全的食品是靠生产出来的，而不是靠检验出来的。一种食品在加工的过程中可能存在的不安全因素很多，如果意义检验，生产成本会很高，大众无法接受。但是在生产过程中能积极地控制原料品质，生产流程，卫生环境，这样就能成产出减少问题，安全食品的可能性。这就是说在美国食品生产过程大都有良好规范的生产流程，再加上有效的监督部门才能够有效阻止故意制造污染，环环把关。</p>
+              </div>
+              <div class="col-md-4">
+                <img src="img/air.jpg" alt="" class="img-circle pull-left">
+                <p><strong>空气清晰。</strong>去过美国的朋友，印象最深刻的莫过于美国的环境和空气质量。难怪我的朋友发自内心的赞叹：“美国美国，美丽的国家”。这既是对美国优美的环境和清洁的空气质量的赞美，也是对中国目前空气质量和环境恶劣的忧虑和期待改善的强烈愿望。美国为什么拥有世界上最好的环境之一？最重要的因素有两个，其一是涉及任何角落的环境保护法律；其二是每个人爱护环境的思想意识。</p>
+              </div>
+              <div class="clearfix"></div>
+              <div class="col-md-4">
+                <img src="img/houses.jpg" alt="" class="img-circle pull-left">
+                <p><strong>房价稳定升值。</strong>过去两年的美国房产市场复苏带来了很多区域大幅的房价上涨，那些被华人买家特别看好的地段更是涨的飞快，从长期投资的角度来看，目前是进入美国住宅市场的难得时机。其中，谈到的主要因素是美国房价探底企稳，利率保持在低位，而美元趋于贬值，具备财力的国内投资者可以把美国房地产看作长期强劲获利的工具。全美住宅建设协会(NAHB)住宅市场指数已连续三个月回升，新屋开工也显著回升，好于市场股价。</p>
+              </div>
+              <div class="col-md-4">
+                <img src="img/calculator.jpg" alt="" class="img-circle pull-left">
+                <p><strong>贷款利率低。</strong>自金融危机以来，美国经济下滑，失业率居高不下。因此，美国采取量化宽松政策，低利率是为了降低社会融资成本，促进经济复苏。目前很多中国买家大部分贷款置业并不是因为拿不出这笔资金，而是对美国超低的贷款利率所吸引，希望能借助资本优势，最大化发挥投资优势。美国目前30年期房贷基准利率为3.41%，中国目前30年期房贷基准利率而6.55%，外国人在美国申请房贷利率会有所上浮，但比较中国的利率仍然低出不少。</p>
+              </div>
+              <div class="col-md-4">
+                <img src="img/old_couple.jpg" alt="" class="img-circle pull-left">
+                <p><strong>产权永久持有，子女可继承。</strong>能让如此多的人对美国房产欲罢的一个重要原因，就是其“永久性”产权。对于中国来的购物者，房屋是最具有保障性的投资产品，即使房产作为赚钱的工具，自住或将来留给自己的子女并一代一代一直传承下去，是极富家族意义的。而永久产权就能满足投资者的愿望。大家知道，美国房产所有权是永久的，这是因为美国是私有制，房子的买卖包括土地，就是说你在买房子的同时也买下了那块土地。</p>
+              </div>
+              <p class="clearfix"></p>
+              <div class="row-fluid text-center">
+                  <div class="col-sm-12">
+                    <button type="button" class="backToTop btn btn-primary">联络经纪人</button>
+                  </div>
+              </div>
+            </section>
+        </div><!--END container-->
+        <footer>
+            <div class="container">
+              <div class="social pull-right">
+                <a href="#"><i class="fa fa-facebook-square"></i></a>
+                <a href="#"><i class="fa fa-twitter-square"></i></a>
+                <a href="#"><i class="fa fa-linkedin-square"></i></a>
+              </div>
+              <p class="pull-left">YourDomain.com Copyright 2014, all rights reserved. | <a data-toggle="modal" data-target="#privacyModal">隐私条款</a> | <a data-toggle="modal" data-target="#termsModal">网站使用条款</a></p>
+            </div>
+        </footer>
+
+        <!--privacy Modal-->
+        <div class="modal fade" id="privacyModal" tabindex="-1" role="dialog" aria-labelledby="privacyModal" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">隐私条款</h4>
+              </div>
+              <div class="modal-body">
+                <p>Your privacy policy here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur imperdiet, erat sit amet dapibus ultrices, elit magna tempus ante, in hendrerit elit elit facilisis ipsum. Integer ut ante varius, euismod erat eu, facilisis purus. Aliquam tempus metus quis purus feugiat fringilla. Aenean convallis purus quis dignissim ullamcorper. Etiam euismod et sem sed vestibulum. Nullam porta, dolor quis volutpat dapibus, augue orci ultrices lorem, quis laoreet lacus nibh eget augue. Vivamus non ante sapien.</p>
+
+                <p>Pellentesque posuere tincidunt magna non molestie. Pellentesque porta aliquet quam, quis volutpat arcu condimentum cursus. Integer facilisis justo enim, at ullamcorper ipsum semper eget. Nulla tristique tellus justo. Nullam sed tellus vel purus elementum faucibus in et elit. Praesent faucibus nibh ut commodo laoreet. Pellentesque adipiscing leo ante, eu vulputate lorem rutrum at. Suspendisse vulputate vel turpis eu blandit. Fusce ultrices congue mi sed aliquet. Curabitur ac libero at nulla aliquam porttitor sed in neque. Cras vehicula, neque eu egestas ornare, felis metus consectetur diam, sed imperdiet lorem neque in erat. Integer non lectus eget nisl bibendum gravida. Curabitur eu quam vestibulum, semper eros vel, eleifend tortor. Vivamus blandit vel nisl in euismod.</p>
+
+                <p>Sed mattis vitae purus non mattis. Nulla felis neque, sollicitudin vitae lobortis non, gravida sed nisi. In dictum aliquet pretium. Donec id auctor purus, id hendrerit lorem. Proin quis eros justo. Phasellus purus sapien, tincidunt ut aliquet eu, mattis et lectus. Fusce et adipiscing lectus. Phasellus eleifend, sem tempor scelerisque dignissim, orci felis pharetra lorem, at cursus orci velit at velit. Aliquam a lorem rutrum, blandit orci ac, gravida ligula. Integer malesuada diam nec consectetur molestie. Duis elit lectus, tincidunt quis urna volutpat, blandit porta lectus. Pellentesque nulla lorem, blandit et sapien sit amet, pellentesque ultrices lectus.</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div><!--END privacy Modal-->
+
+        <!--terms Modal-->
+        <div class="modal fade" id="termsModal" tabindex="-1" role="dialog" aria-labelledby="termsModal" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">网站使用条款</h4>
+              </div>
+              <div class="modal-body">
+                <p>Your terms and condition here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean elementum, nulla in pulvinar consectetur, urna lectus egestas tortor, mollis hendrerit ipsum neque ut dui. Integer faucibus nec libero et tempus. Sed pharetra tincidunt lacinia. Integer non risus iaculis, fermentum dolor sed, hendrerit mi. Vivamus quis elit purus. Cras laoreet, neque vel convallis scelerisque, tellus purus fringilla erat, et iaculis nisi sapien ut ipsum. Etiam eget lacus lacus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Quisque viverra ultricies velit semper tincidunt. Nullam a lobortis lacus. Integer pulvinar erat non tortor iaculis facilisis.</p>
+
+                <p>Aliquam rhoncus suscipit ultrices. Proin eu lectus lectus. Cras tincidunt eu metus sit amet lobortis. Nam commodo volutpat nibh vitae ornare. Vestibulum ut venenatis tellus. In sit amet suscipit risus. Fusce mattis nec augue quis cursus. Fusce id varius orci. In mollis ut nisl eget ornare.</p>
+
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras dolor erat, dignissim nec massa quis, condimentum pellentesque mi. Nullam tempus, tortor at sollicitudin interdum, augue metus fringilla quam, at luctus tortor libero vitae dolor. Integer fermentum dui sed lectus tempus vehicula. Sed consequat mollis nibh, ac dictum mi sagittis varius. Mauris sed felis accumsan, interdum nibh at, mollis enim. Morbi placerat in eros sit amet lobortis. Donec rutrum elementum felis in consectetur. Maecenas gravida, lorem id hendrerit tincidunt, neque diam aliquet leo, sed eleifend nibh neque id sapien. Donec blandit nec neque vel dapibus.</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div><!--END terms Modal-->
+      </div><!--END wrap-->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+        <script src="bootstrap/js/bootstrap.js"></script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script>
+            (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+            e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+            e.src='//www.google-analytics.com/analytics.js';
+            r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+            ga('create','UA-XXXXX-X');ga('send','pageview');
+		 </script>
+    </body>
+</html>
