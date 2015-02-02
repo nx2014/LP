@@ -24,8 +24,8 @@ function sendMail(){
 
 switch($_GET['xAction']){
 	case 'sendMail':
-					echo sendMail();
-					break;
+	echo sendMail();
+	break;
 }
 ?>
 
