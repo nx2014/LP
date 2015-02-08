@@ -8,12 +8,9 @@ if ($_POST) {
 	
 	$Subject="New message from user ".$firstName." ".$lastName;
 	
-	//$from = "DoNotReply <donotreply@landingpageburger.com>";
-	//$from = "aaa bbb <aa@bb.com>";//working
 	$from = $firstName." ".$lastName."<".$email.">";
 	$fromTest = $firstName." ".$lastName."<".$email.">";
-	//$fromTest = $email;
-	$to="rongxia2014@gmail.com";
+	$to="rongxia2014@gmail.com";  //CHANGE recipient here:   kikix2125@gmail.com
 	
 	$headers .= "MIME-Version: 1.0" . " \r\n";
 	$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
@@ -26,7 +23,7 @@ if ($_POST) {
 	}
 	
 } else {
-	$isSuccess = "post is empty";
+	$isSuccess = "";
 }
 ?>
 

@@ -91,12 +91,11 @@
 			}
 			
 			// disable the submit button to prevent repeated clicks
-			document.getElementById("submitBtn").disabled = true;
 			document.getElementById("submitBtnImg").src = "img/loader.gif";
+			document.getElementById("submitBtn").disabled = true;
 			document.getElementById("submitBtnImg").style.visibility = "";
 			//return false;
 			$("#mainForm").submit();
-			//form$.get(0).submit();
 		});
 
 	});
