@@ -1,6 +1,35 @@
 <?php
-
+if ($_POST) {
+	$firstName = trim($_POST['firstName']);
+	$lastName = trim($_POST['lastName']);
+	$email = trim($_POST['email']);
+	$phone = trim($_POST['phone']);
+	$message = trim($_POST['message']);
+	
+	$Subject="New message from user ".$firstName." ".$lastName;
+	
+	//$from = "DoNotReply <donotreply@landingpageburger.com>";
+	//$from = "aaa bbb <aa@bb.com>";//working
+	$from = $firstName." ".$lastName."<".$email.">";
+	$fromTest = $firstName." ".$lastName."<".$email.">";
+	//$fromTest = $email;
+	$to="rongxia2014@gmail.com";
+	
+	$headers .= "MIME-Version: 1.0" . " \r\n";
+	$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+	$headers .= "From: ".$from." \r\n";
+	
+	$emailSent = mail($to,$Subject,$message,$headers);
+	//to show confirmation modal
+	if($emailSent){
+		$isSuccess = 'email sent successfully';						   
+	}
+	
+} else {
+	$isSuccess = "post is empty";
+}
 ?>
+
 
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -209,28 +238,29 @@
 			  <div class="row">
                   <div class="form-group col-md-6">
                     <label for="firstName">First Name</label>
-                    <input type="text" class="form-control firstNameInput clearMeFocus" id="firstName" placeholder="John">
+                    <input type="text" class="form-control firstNameInput clearMeFocus" id="firstName" placeholder="John" name="firstName" value="aaa">
                   </div>
                   <div class="form-group col-md-6">
                     <label for="lastName">Last Name</label>
-                    <input type="text" class="form-control lastNameInput clearMeFocus" id="lastName" placeholder="Doe">
+                    <input type="text" class="form-control lastNameInput clearMeFocus" id="lastName" placeholder="Doe" name="lastName"  value="bbb">
                   </div>
                 </div>
                 <div class="row">
                   <div class="form-group col-md-6">
                     <label for="email">Email Address</label>
-                    <input type="email" class="form-control emailInput clearMeFocus" id="email" placeholder="Enter Email">
+                    <input type="email" class="form-control emailInput clearMeFocus" id="email" placeholder="Enter Email" name="email"  value="aa@bb.com">
                   </div>
                   <div class="form-group col-md-6">
                     <label for="phone">Phone Number</label>
-                    <input type="phone" class="form-control phoneInput clearMeFocus" id="phone" placeholder="Phone Number">
+                    <input type="phone" class="form-control phoneInput clearMeFocus" id="phone" placeholder="Phone Number" name="phone" value="1234565" >
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="exampleInputPassword1">Message</label>
-                  <textarea class="form-control" rows="10"></textarea>
+                  <textarea class="form-control" rows="10" name="message">aa comment</textarea>
                 </div>
-                <button type="submit" class="submit-button btn btn-primary btn-lg"id="submitBtn">Send<img src="" style="visibility:hidden" id="submitBtnImg" width="16" height="11"></button>
+                <button type="submit" class="submit-button btn btn-primary btn-lg" id="submitBtn">Send<img src="" style="visibility:hidden" id="submitBtnImg" width="16" height="11"></button>
+				<div><?php  echo $isSuccess; ?></div>
               </form>
             </div>
           </div>
@@ -317,3 +347,9 @@
         </script>
     </body>
 </html>
+
+
+
+
+
+

@@ -16,7 +16,7 @@
 		
 		$('input.emailInput').blur(function(){
 			var email = $(this).val();
-			var reg=/(^[a-z]+|^[a-z]+[0-9]*)+[.]?([a-z]*|[a-z]*[0-9]*)*@([a-z]+)[.]([a-z]+)$/;
+			var reg=/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 			$("div#errMsg").css('display','none');
 			$('div#errMsg').html('');
 			if(!reg.test(email)){
@@ -94,8 +94,9 @@
 			document.getElementById("submitBtn").disabled = true;
 			document.getElementById("submitBtnImg").src = "img/loader.gif";
 			document.getElementById("submitBtnImg").style.visibility = "";
-			return false;
-			//$("#mainForm").submit();
+			//return false;
+			$("#mainForm").submit();
+			//form$.get(0).submit();
 		});
 
 	});
