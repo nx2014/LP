@@ -66,9 +66,6 @@
 	
 
 		$("#mainForm").submit(function(event) {
-			//alert("aaa");
-			//document.getElementById("errMsg").style.display="block";
-			//document.getElementById("errMsg").innerHTML="error 001";
 			//form validation
 			var error="";
 			if(document.getElementById("firstName").value==''){
@@ -89,12 +86,9 @@
 				$('div#errMsg').html(error);
 				return false;
 			}
-			
 			// disable the submit button to prevent repeated clicks
-			document.getElementById("submitBtnImg").src = "img/loader.gif";
 			document.getElementById("submitBtn").disabled = true;
 			document.getElementById("submitBtnImg").style.visibility = "";
-			//return false;
 			$("#mainForm").submit();
 		});
 

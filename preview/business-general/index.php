@@ -1,31 +1,56 @@
 <?php
 if ($_POST) {
-	$firstName = trim($_POST['firstName']);
-	$lastName = trim($_POST['lastName']);
-	$email = trim($_POST['email']);
-	$phone = trim($_POST['phone']);
-	$message = trim($_POST['message']);
-	
-	$Subject="New message from user ".$firstName." ".$lastName;
-	
-	$from = $firstName." ".$lastName."<".$email.">";
-	$fromTest = $firstName." ".$lastName."<".$email.">";
-	$to="rongxia2014@gmail.com";  //CHANGE recipient here:   kikix2125@gmail.com
-	
-	$headers .= "MIME-Version: 1.0" . " \r\n";
-	$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-	$headers .= "From: ".$from." \r\n";
-	
-	$emailSent = mail($to,$Subject,$message,$headers);
-	//to show confirmation modal
-	if($emailSent){
-		$isSuccess = 'email sent successfully';						   
+	$KanBuJian = trim($_POST['KanBuJian']);
+	if($KanBuJian == '') {
+		//ONLY CHANGE THIS PART -- begin
+		$businessName = "Business General"; 
+		$businessEmail = "rongxia2014@gmail.com"; //CHANGE recipient here:   kikix2125@gmail.com
+		//ONLY CHANGE THIS PART -- end
+		
+		//email to seller
+		$firstName = trim($_POST['firstName']);
+		$lastName = trim($_POST['lastName']);
+		$buyerEmail = trim($_POST['email']);
+		$phone = trim($_POST['phone']);
+			
+		$sellerEmailBody = "First Name: ".$firstName."<BR>";
+		$sellerEmailBody .= "Last Name: ".$lastName."<BR>";
+		$sellerEmailBody .= "Email: ".$buyerEmail."<BR>";
+		$sellerEmailBody .= "Phone: ".$phone."<BR><BR>";
+		$sellerEmailBody .= trim($_POST['message']);
+		
+		$Subject="New message from user ".$firstName." ".$lastName;
+		$from = $firstName." ".$lastName."<".$buyerEmail.">";
+		$headers = "MIME-Version: 1.0" . " \r\n";
+		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+		$headers .= "From: ".$from." \r\n";
+		
+		$sellerEmailSent = mail($businessEmail,$Subject,$sellerEmailBody,$headers);
+
+		//email to buyer
+		$Subject = "Your posted message on "."Business General.com";
+		$buyerEmailBody = $sellerEmailBody;
+		$headers = "MIME-Version: 1.0" . " \r\n";
+		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+		//$headers .= "From: ".$businessName."<".$businessEmail."> \r\n";
+		$headers .= "From: ".$businessName."<".$businessEmail."> \r\n";
+		$buyerEmailSent = mail($buyerEmail,$Subject,$buyerEmailBody,$headers);
+		
+		//to show confirmation modal
+		if($sellerEmailSent && $buyerEmailSent){
+			$isSuccess = 'true';						   
+		} else {
+			$isSuccess = 'false';
+		}
+	} else {
+		$isSuccess="submit by bot";
 	}
-	
-} else {
+} else {//NOT a POST request
 	$isSuccess = "";
 }
 ?>
+
+
 
 
 <!DOCTYPE html>
@@ -245,7 +270,7 @@ if ($_POST) {
                 <div class="row">
                   <div class="form-group col-md-6">
                     <label for="email">Email Address</label>
-                    <input type="email" class="form-control emailInput clearMeFocus" id="email" placeholder="Enter Email" name="email"  value="aa@bb.com">
+                    <input type="email" class="form-control emailInput clearMeFocus" id="email" placeholder="Enter Email" name="email"  value="rongxia123@gmail.com">
                   </div>
                   <div class="form-group col-md-6">
                     <label for="phone">Phone Number</label>
@@ -256,13 +281,51 @@ if ($_POST) {
                   <label for="exampleInputPassword1">Message</label>
                   <textarea class="form-control" rows="10" name="message">aa comment</textarea>
                 </div>
-                <button type="submit" class="submit-button btn btn-primary btn-lg" id="submitBtn">Send<img src="" style="visibility:hidden" id="submitBtnImg" width="16" height="11"></button>
-				<div><?php  echo $isSuccess; ?></div>
+				<input type="text" name="KanBuJian" class="kanbujian" value="">
+                <button type="submit" class="submit-button btn btn-primary btn-lg" id="submitBtn">Send<img src="img/loader.gif" style="visibility:hidden" id="submitBtnImg" width="16" height="11"></button>
               </form>
             </div>
           </div>
         </section>
 
+		<!--Thank you Modal-->
+        <div class="modal fade" id="thankYouModal" tabindex="-1" role="dialog" aria-labelledby="thankYouModal" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Thank You For Your Message</h4>
+              </div>
+              <div class="modal-body">
+                <p>Your message was successfully sent to owner.</p>
+                <a>Thank you!</a>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div><!--END thank you Modal-->
+		
+		<!--Failure Modal-->
+        <div class="modal fade" id="failureModal" tabindex="-1" role="dialog" aria-labelledby="thankYouModal" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Sending Your Message Failed</h4>
+              </div>
+              <div class="modal-body">
+                <p>Your message was not sent to owner.</p>
+                <a>Please try again later!</a>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div><!--END thank you Modal-->
+		
         <footer>
           <p class="text-muted text-center">YourDomain.com, 2014. All Rights Reserved. <a data-toggle="modal" data-target="#privacyModal">Privacy Policy</a> | <a data-toggle="modal" data-target="#termsModal">Terms & Conditions</a></p>
         </footer>
@@ -342,6 +405,19 @@ if ($_POST) {
             r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
             ga('create','UA-XXXXX-X');ga('send','pageview');
         </script>
+		
+		<!-- pass php vairable to javascript -->
+		<script type="text/javascript">
+			$(window).load(function(){
+				var emailIsSent = "<?php echo $isSuccess; ?>";
+				if(emailIsSent == "true") {
+					$('#thankYouModal').modal('show');
+				} else if(emailIsSent == "false") {
+					$('#failureModal').modal('show');
+				}
+				
+			});	
+		</script>
     </body>
 </html>
 
