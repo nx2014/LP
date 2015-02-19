@@ -87,9 +87,11 @@
 				return false;
 			}
 			// disable the submit button to prevent repeated clicks
-			document.getElementById("submitBtn").disabled = true;
+			document.getElementById("sendText").innerHTML = "";
 			document.getElementById("submitBtnImg").style.visibility = "";
+			document.getElementById("submitBtn").disabled = true;
 			$("#mainForm").submit();
+			//return false;//for testing, to disable submission
 		});
 
 	});

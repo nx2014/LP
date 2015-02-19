@@ -3,8 +3,8 @@ if ($_POST) {
 	$KanBuJian = trim($_POST['KanBuJian']);
 	if($KanBuJian == '') {
 		//ONLY CHANGE THIS PART -- begin
-		$businessName = "Business General"; 
-		$businessEmail = "rongxia2014@gmail.com"; //CHANGE recipient here:   kikix2125@gmail.com
+		$sellerName = "Business General"; 
+		$sellerEmail = "rongxia2014@gmail.com"; //CHANGE recipient here:   kikix2125@gmail.com
 		//ONLY CHANGE THIS PART -- end
 		
 		//email to seller
@@ -15,25 +15,26 @@ if ($_POST) {
 			
 		$sellerEmailBody = "First Name: ".$firstName."<BR>";
 		$sellerEmailBody .= "Last Name: ".$lastName."<BR>";
-		$sellerEmailBody .= "Email: ".$buyerEmail."<BR>";
-		$sellerEmailBody .= "Phone: ".$phone."<BR><BR>";
+		$sellerEmailBody .= "Email Address: ".$buyerEmail."<BR>";
+		$sellerEmailBody .= "Phone Number: ".$phone."<BR><BR>";
+		$sellerEmailBody .= "Message: <BR>";
 		$sellerEmailBody .= trim($_POST['message']);
 		
-		$Subject="New message from user ".$firstName." ".$lastName;
-		$from = $firstName." ".$lastName."<".$buyerEmail.">";
+		$Subject="You Got A New Message From Your Landing Page";
+		$from = "Landingpage Burger<DoNotReply@landingpageburger.com>";
+		//$from = "landingpageburger<andy2003_67@hotmail.com>";
 		$headers = "MIME-Version: 1.0" . " \r\n";
 		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 		$headers .= "From: ".$from." \r\n";
 		
-		$sellerEmailSent = mail($businessEmail,$Subject,$sellerEmailBody,$headers);
+		$sellerEmailSent = mail($sellerEmail,$Subject,$sellerEmailBody,$headers);
 
 		//email to buyer
-		$Subject = "Your posted message on "."Business General.com";
-		$buyerEmailBody = $sellerEmailBody;
+		$Subject = "Thank You For Contacting Us!";
+		$buyerEmailBody = "Your message was successfully sent.";
 		$headers = "MIME-Version: 1.0" . " \r\n";
 		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-		//$headers .= "From: ".$businessName."<".$businessEmail."> \r\n";
-		$headers .= "From: ".$businessName."<".$businessEmail."> \r\n";
+		$headers .= "From: ".$sellerName."<".$sellerEmail."> \r\n";
 		$buyerEmailSent = mail($buyerEmail,$Subject,$buyerEmailBody,$headers);
 		
 		//to show confirmation modal
@@ -282,7 +283,9 @@ if ($_POST) {
                   <textarea class="form-control" rows="10" name="message">aa comment</textarea>
                 </div>
 				<input type="text" name="KanBuJian" class="kanbujian" value="">
-                <button type="submit" class="submit-button btn btn-primary btn-lg" id="submitBtn">Send<img src="img/loader.gif" style="visibility:hidden" id="submitBtnImg" width="16" height="11"></button>
+                <button type="submit" class="submit-button btn btn-primary btn-lg" id="submitBtn" style="width:80px;height:50px;">
+					<div id="sendText">Send</div><img src="img/loader.gif" style="visibility:hidden" id="submitBtnImg" width="16" height="11">
+				</button>
               </form>
             </div>
           </div>
@@ -294,11 +297,11 @@ if ($_POST) {
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Thank You For Your Message</h4>
+                <h4 class="modal-title" id="myModalLabel">Thank You For Contacting Us!</h4>
               </div>
               <div class="modal-body">
-                <p>Your message was successfully sent to owner.</p>
-                <a>Thank you!</a>
+                <p>Your message was successfully sent.</p>
+                <a></a>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -313,11 +316,11 @@ if ($_POST) {
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Sending Your Message Failed</h4>
+                <h4 class="modal-title" id="myModalLabel">Error! Your Message Was Not Sent!</h4>
               </div>
               <div class="modal-body">
-                <p>Your message was not sent to owner.</p>
-                <a>Please try again later!</a>
+                <p>Please check your information and try again.</p>
+                <a></a>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
