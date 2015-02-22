@@ -21,8 +21,8 @@ if ($_POST) {
 		$sellerEmailBody .= trim($_POST['message']);
 		
 		$Subject="You Got A New Message From Your Landing Page";
-		$from = "Landingpage Burger<DoNotReply@landingpageburger.com>";
-		//$from = "landingpageburger<andy2003_67@hotmail.com>";
+		//$from = "Landingpage Burger<DoNotReply@landingpageburger.com>";
+		$from = "DoNotReply <donotreply@landingpageburger.com>";
 		$headers = "MIME-Version: 1.0" . " \r\n";
 		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 		$headers .= "From: ".$from." \r\n";
