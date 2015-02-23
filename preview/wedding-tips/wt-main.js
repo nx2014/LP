@@ -1,7 +1,8 @@
     //jQuery is used only for this example; it isn't required to use Stripe 
 
 	// this identifies your website in the createToken call below
-	Stripe.setPublishableKey('pk_test_4L13r8dLhN7f8io5MWkK9u3p');
+	Stripe.setPublishableKey('pk_test_4L13r8dLhN7f8io5MWkK9u3p');//rx test pk
+	//Stripe.setPublishableKey('pk_live_G7TdddadVeL8RHBwYRinndSX');//nx live pk
 	 
 	function testClick() {
 		//alert("alert from testClick:"+$('.emailInput').val());
@@ -177,7 +178,7 @@
 		if(isSuccessShow) {
 			if(isSuccess == "true") {
 				$(".modalSuccess").modal();
-			} else {
+			} else if(isSuccess == "false"){
 				$(".modalFailed").modal();
 			}
 		}

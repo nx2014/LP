@@ -3,23 +3,32 @@
 require 'stripe-php-1.16.0/lib/Stripe.php';
 
 $month=date('m');
+$year=date("Y");
+$month="05";//testing
+$year="2017"; //testing
+
+$isSuccessShow = "false";
+$isSuccess = "";
+$error = "";
+
 if ($_POST) {
-	Stripe::setApiKey("sk_test_4L13Yi3xCJ0hOB3BIiVE2TFU");
-	$error = '';
-	$isSuccessShow = 'true';
-	$isSuccess = 'false';
+	Stripe::setApiKey("sk_test_4L13Yi3xCJ0hOB3BIiVE2TFU");//rx test
+	//Stripe::setApiKey("sk_live_mDfQRiYW1k5qLC7QjS6i22No");//nuo live
+	
+
+
 	$downloadLink = "www.abcdefg.com"; // Hardcode download link here. Each seller has a different link.
 	try {
 		//submit payment charge request
 		if (!isset($_POST['stripeToken'])) {
 			throw new Exception("The Stripe Token was not generated correctly");
 		}
-		Stripe_Charge::create(array("amount" => 595,
-									"currency" => "usd",
-									"card" => $_POST['stripeToken']));
 		
-		//hardcoded seller email here. Each seller has a different email.
-		$sellerEmail = "rongxia2014@gmail.com"; //xiarongxr@gmail.com | kikix2125@gmail.com
+		$isSuccessShow = 'true';
+		$isSuccess = 'false';
+		
+		//sells email
+		$sellerEmail = "rongxia2014@gmail.com"; 
 		
 		$firstName = trim($_POST['hiddenFirstName']);
 		$lastName = trim($_POST['hiddenLastName']);
@@ -27,6 +36,16 @@ if ($_POST) {
 		$cardType = trim($_POST['hiddenCardType']);
 		$cardLast4Digits = trim($_POST['hiddenCardLast4Digits']);
 		$buyerEmail = trim($_POST['hiddenEmail']);
+		
+		//Get the credit card details submitted by the form
+		$token = $_POST['stripeToken'];
+		error_log("token:".$token);
+		Stripe_Charge::create(array("amount" => 51, //testing using 123
+									"currency" => "usd",
+									"card" => $token,
+									"description" => $buyerEmail
+									)
+							);		
 		
 		//send email to seller
 		$from = "DoNotReply <donotreply@landingpageburger.com>";
@@ -64,15 +83,15 @@ if ($_POST) {
 		}
 	} catch (Exception $e) {
 		$error = $e->getMessage();
-		alert($error);
+		//alert($error);
 	}
 }
 ?>
 
 
-<!--Digital Book Sellers - Wedding Tips Version 12.13.14
+<!--Digital Book Sellers - Wedding Tips Version 02.21.15
 
-- Design alternation, added contact info box
+- Updated to licensed images
 
 -->
 
@@ -101,8 +120,6 @@ if ($_POST) {
     <link rel="shortcut icon" href="favicon.ico">
 
     <script src="js/vendor/modernizr-2.6.2.min.js"></script>
-
-		
 </head>
 
 	
@@ -156,16 +173,11 @@ if ($_POST) {
         </div><!--END row-->
         <div class="mainContent row">
         	<div class="productImg col-md-4 col-sm-12">
-            	<img class="product img-responsive col-sm-12 text-center" src="img/book.png">
+            	<img class="product img-responsive col-sm-12" src="img/book.png">
             	<div class="preview col-md-12 text-center" data-toggle="modal" data-target="#previewModal">
             		<a><span class="glyphicon glyphicon-search"></span> Click Here For A Preview of Content</a>
             	</div>
             	<div class="clearfix"></div>
-            	<div class="seal row">
-              		<div class="col-sm-12">
-                		<img class="qualitySeal" src="img/qualitySeal.png" width="128" height="119">
-              		</div>
-            	</div>
           	</div><!--END productImg-->
           <div class="bullets col-md-4 col-sm-12">
             <h3>Have you ever thought about:</h3>
@@ -181,9 +193,9 @@ if ($_POST) {
               <li><span class="glyphicon glyphicon-star"></span> Then you must read this ebook!</li>
             </ul>
             <div class="contact row-fluid text-center">
+            	<img class="margin-bottom" src="img/support.png">
             	<h3>Questions? Just Contact Us!</h3>
             	<p>202-555-0101</p>
-            	<p><a href="#">info@yourdomain.com</a></p>
             </div>
           </div><!--END bullets-->
         	<div class="form col-md-4 col-sm-12">
@@ -207,7 +219,7 @@ if ($_POST) {
 
 									<div class="email form-row form-group">
 										<label>Where to send the ebook?</label>
-										<input class="emailInput clearMeFocus form-control" id="email" type="text" size="20" value="Your Email Address" data-stripe="email"/>
+										<input class="emailInput clearMeFocus form-control" id="email" type="text" size="20" value="rongxia123@gmail.com" data-stripe="email"/>
 									</div>
 
 									<label>Credit Card Information</label><div class="cc pull-right"><img src="img/cc.png" width="125"></div>
@@ -217,13 +229,13 @@ if ($_POST) {
 										Transactions are performed securely by Stripe Checkout
 									</div>
 									<div class="fullName form-row">
-										<input class="firstName clearMeFocus form-control" id="firstName" type="text" size="20" value="First Name">
-										<input class="lastName clearMeFocus form-control" id="lastName" type="text" size="20" value="Last Name">
+										<input class="firstName clearMeFocus form-control" id="firstName" type="text" size="20" value="Rong">
+										<input class="lastName clearMeFocus form-control" id="lastName" type="text" size="20" value="Xia">
 									</div>
 									<div class="clearfix"></div>									
 
 									<div class="number form-row">
-										<input type="text" size="20" autocomplete="off" id="creditCardNumber" class="card-number cardNumberInput clearMeFocus form-control" value="Credit Card Number" data-stripe="number"/>
+										<input type="text" size="20" autocomplete="off" id="creditCardNumber" class="card-number cardNumberInput clearMeFocus form-control" value="4242424242424242" data-stripe="number"/>
 									</div>
 
 									<div class="expiration form-row">
@@ -252,7 +264,7 @@ if ($_POST) {
 									</div>
 
 									<div class="cvc form-row">
-										<input type="text" size="4" autocomplete="off" id="cvcCode" class="card-cvc cvcInput clearMeFocus form-control" value="CVC Code" data-stripe="cvc"/>
+										<input type="text" size="4" autocomplete="off" id="cvcCode" class="card-cvc cvcInput clearMeFocus form-control" value="" data-stripe="cvc"/>
 									</div>
 									
 									<button type="submit" class="submit-button btn btn-primary" onClick="sendMail()">Get Instant Access &rarr;</button>
