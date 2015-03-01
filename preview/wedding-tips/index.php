@@ -4,8 +4,8 @@ require 'stripe-php-1.16.0/lib/Stripe.php';
 
 $month=date('m');
 $year=date("Y");
-$month="05";//testing
-$year="2017"; //testing
+//$month="05";//testing
+//$year="2017"; //testing
 
 $isSuccessShow = "false";
 $isSuccess = "";
@@ -14,8 +14,6 @@ $error = "";
 if ($_POST) {
 	Stripe::setApiKey("sk_test_4L13Yi3xCJ0hOB3BIiVE2TFU");//rx test
 	//Stripe::setApiKey("sk_live_mDfQRiYW1k5qLC7QjS6i22No");//nuo live
-	
-
 
 	$downloadLink = "www.abcdefg.com"; // Hardcode download link here. Each seller has a different link.
 	try {
@@ -77,13 +75,28 @@ if ($_POST) {
 		$headers .= "From: ".$from."\r\n";
 		$sentToBuyer = mail($to,$Subject,$msg,$headers);
 		
+		//MailChimp integration, transaction success doesn't depend on this subscription
+		$subscribeMailChimp = trim($_POST['hiddenSubscribeMailChimp']);
+		error_log("subscribeMailChimp:".$subscribeMailChimp);
+		if($subscribeMailChimp == "Y") {
+			include "./libs/MailChimp/MailChimp.php";
+			//find API key at MailChimp site, dropdown account/Extras/API keys
+			$MailChimp = new \Drewm\MailChimp('3e2074c3da2d0262d35926048bdc6cae-us9'); //Change MailChimp API Key here
+			$result = $MailChimp->call('lists/subscribe', array(
+                'id'            => '4c703dc232',  //Change list ID here, e.g 4c703dc232 for "TestGroup"
+                'email'         => array('email'=>$buyerEmail),
+                'merge_vars'    => array('FNAME'=>$firstName, 'LNAME'=>$lastName),
+				'double_optin'  => false  
+            ));
+			error_log("subscribe MailChimp result:".$result);
+		}
+		
 		//to show confirmation modal
 		if($sentToSeller && $sentToBuyer){
 			$isSuccess = 'true';						   
 		}
 	} catch (Exception $e) {
 		$error = $e->getMessage();
-		//alert($error);
 	}
 }
 ?>
@@ -135,7 +148,7 @@ if ($_POST) {
 				  </div>
 				  <div class="modal-body">
 	                <p>Congratulations! Your transaction was succesful. You can now view or download your ebook from the below link:</p>
-	                <a href="#Your_Download_URL_Here#" target="_blank"><?php  if ($isSuccess == 'true') { echo $downloadLink; }?></a>
+	                <a href="<?php  if ($isSuccess == 'true') { echo $downloadLink; }?>" target="_blank"><?php  if ($isSuccess == 'true') { echo $downloadLink; }?></a>
 	              </div>
 				  <div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -219,7 +232,7 @@ if ($_POST) {
 
 									<div class="email form-row form-group">
 										<label>Where to send the ebook?</label>
-										<input class="emailInput clearMeFocus form-control" id="email" type="text" size="20" value="rongxia123@gmail.com" data-stripe="email"/>
+										<input class="emailInput clearMeFocus form-control" id="email" type="text" size="20" value="rongxia123@gmail.com" placeholder="Your Email Address" data-stripe="email"/>
 									</div>
 
 									<label>Credit Card Information</label><div class="cc pull-right"><img src="img/cc.png" width="125"></div>
@@ -229,13 +242,13 @@ if ($_POST) {
 										Transactions are performed securely by Stripe Checkout
 									</div>
 									<div class="fullName form-row">
-										<input class="firstName clearMeFocus form-control" id="firstName" type="text" size="20" value="Rong">
-										<input class="lastName clearMeFocus form-control" id="lastName" type="text" size="20" value="Xia">
+										<input class="firstName clearMeFocus form-control" id="firstName" type="text" size="20" value="r" placeholder="First Name">
+										<input class="lastName clearMeFocus form-control" id="lastName" type="text" size="20" value="x" placeholder="Last Name">
 									</div>
 									<div class="clearfix"></div>									
 
 									<div class="number form-row">
-										<input type="text" size="20" autocomplete="off" id="creditCardNumber" class="card-number cardNumberInput clearMeFocus form-control" value="4242424242424242" data-stripe="number"/>
+										<input type="text" size="20" autocomplete="off" id="creditCardNumber" class="card-number cardNumberInput clearMeFocus form-control" value="4242424242424242" placeholder="Credit Card Number" data-stripe="number"/>
 									</div>
 
 									<div class="expiration form-row">
@@ -256,16 +269,18 @@ if ($_POST) {
 										<select class="form-control card-expiry-year yearInput" data-stripe="exp-year">
 												<?PHP for($i=date("Y"); $i<=date("Y")+2; $i++)
 												if($year == $i)
-												echo "<option value='$i' selected>$i</option>";
+													echo "<option value='$i' selected>$i</option>";
 												else
-												echo "<option value='$i'>$i</option>";
+													echo "<option value='$i'>$i</option>";
 												?>
 										</select>
 									</div>
 
 									<div class="cvc form-row">
-										<input type="text" size="4" autocomplete="off" id="cvcCode" class="card-cvc cvcInput clearMeFocus form-control" value="" data-stripe="cvc"/>
+										<input type="text" size="4" autocomplete="off" id="cvcCode" class="card-cvc cvcInput clearMeFocus form-control" value="123" placeholder="CVC Code" data-stripe="cvc"/>
 									</div>
+									
+									<div><input type="checkbox" align="left" id="subscribeMailChimp" value="Y" checked />Subscribe mailchimp</div>
 									
 									<button type="submit" class="submit-button btn btn-primary" onClick="sendMail()">Get Instant Access &rarr;</button>
 							</form>

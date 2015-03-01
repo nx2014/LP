@@ -50,8 +50,10 @@
 			form$.append("<input type='hidden' name='hiddenLastName' value='" + $('.lastName').val() + "' />");
 			form$.append("<input type='hidden' name='hiddenCardType' value='" + getCardType($('.cardNumberInput').val()) + "' />");
 			form$.append("<input type='hidden' name='hiddenCardLast4Digits' value='" + $('.cardNumberInput').val().slice(-4) + "' />");
-
-			// and submit
+			if(document.getElementById("subscribeMailChimp").checked) {
+				form$.append("<input type='hidden' name='hiddenSubscribeMailChimp' value='Y' />");
+			}
+			//submit
 			form$.get(0).submit();
 		}
 	}
@@ -137,19 +139,19 @@
 		$("#payment-form").submit(function(event) {
 			//form validation
 			var error="";
-			if(document.getElementById("firstName").value=='Your Email Address'){
+			if(document.getElementById("email").value==''){
 				error=error+"<li>Your Email Address</li>";
 			}
-			if(document.getElementById("firstName").value=='First Name'){
+			if(document.getElementById("firstName").value==''){
 				error=error+"<li>First Name</li>";
 			}
-			if(document.getElementById("lastName").value=='Last Name'){
+			if(document.getElementById("lastName").value==''){
 				error=error+"<li>Last Name</li>";
 			}
-			if(document.getElementById("creditCardNumber").value=='Credit Card Number'){
+			if(document.getElementById("creditCardNumber").value==''){
 				error=error+"<li>Credit Card Number</li>";
 			}
-			if(document.getElementById("cvcCode").value=='CVC Code'){
+			if(document.getElementById("cvcCode").value==''){
 				error=error+"<li>CVC Code</li>";
 			}		
 			if(error!=""){
