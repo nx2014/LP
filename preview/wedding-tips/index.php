@@ -282,7 +282,11 @@ if ($_POST) {
 									
 									<div><input type="checkbox" align="left" id="subscribeMailChimp" value="Y" checked />Subscribe mailchimp</div>
 									
-									<button type="submit" class="submit-button btn btn-primary" onClick="sendMail()">Get Instant Access &rarr;</button>
+									<!-- <button type="submit" class="submit-button btn btn-primary" onClick="sendMail()">Get Instant Access &rarr;</button> -->
+									<button type="submit" class="submit-button btn btn-primary" id="submitBtn">
+										<div id="sendText">Get Instant Access &rarr;</div><img src="img/loader.gif" style="visibility:hidden" id="submitBtnImg" >
+									</button>
+
 							</form>
 						</div><!--END body-->
 

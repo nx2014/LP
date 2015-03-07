@@ -162,7 +162,10 @@
 			}
 
 			// disable the submit button to prevent repeated clicks
-			$('.submit-button').attr("disabled", "disabled");
+			//$('.submit-button').attr("disabled", "disabled");
+			document.getElementById("sendText").innerHTML = "";
+			document.getElementById("submitBtnImg").style.visibility = "";
+			document.getElementById("submitBtn").disabled = true;			
 			 
 			// createToken returns immediately - the supplied callback submits the form if there are no errors
 			Stripe.createToken({
