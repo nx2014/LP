@@ -284,7 +284,7 @@ if ($_POST) {
 									
 									<!-- <button type="submit" class="submit-button btn btn-primary" onClick="sendMail()">Get Instant Access &rarr;</button> -->
 									<button type="submit" class="submit-button btn btn-primary" id="submitBtn">
-										<div id="sendText">Get Instant Access &rarr;</div><img src="img/loader.gif" style="visibility:hidden" id="submitBtnImg" >
+										<div id="sendText">Get Instant Access &rarr;</div><img src="img/loader.gif" style="display:none" id="submitBtnImg" >
 									</button>
 
 							</form>
