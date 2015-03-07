@@ -1,4 +1,3 @@
-
 <?php
 require 'stripe-php-1.16.0/lib/Stripe.php';
 
@@ -10,6 +9,12 @@ $year=date("Y");
 $isSuccessShow = "false";
 $isSuccess = "";
 $error = "";
+
+$originalAmountByCents = 295; //Change here: original amount in cents, e.g 995
+$purchaseAmountByCents = 195; //Change here: purchase amount in cents, e.g 595
+
+$originalAmount4Display = "$".substr_replace($originalAmountByCents, ".", -2, 0);
+$purchaseAmount4Display = "$".substr_replace($purchaseAmountByCents, ".", -2, 0);
 
 if ($_POST) {
 	Stripe::setApiKey("sk_test_4L13Yi3xCJ0hOB3BIiVE2TFU");//rx test
@@ -30,7 +35,7 @@ if ($_POST) {
 		
 		$firstName = trim($_POST['hiddenFirstName']);
 		$lastName = trim($_POST['hiddenLastName']);
-		$purchaseAmount = "$5.95";
+
 		$cardType = trim($_POST['hiddenCardType']);
 		$cardLast4Digits = trim($_POST['hiddenCardLast4Digits']);
 		$buyerEmail = trim($_POST['hiddenEmail']);
@@ -38,7 +43,7 @@ if ($_POST) {
 		//Get the credit card details submitted by the form
 		$token = $_POST['stripeToken'];
 		error_log("token:".$token);
-		Stripe_Charge::create(array("amount" => 51, //testing using 123
+		Stripe_Charge::create(array("amount" => $purchaseAmountByCents, //in cents, Stripe doesn't use decimal point, so 123 cents means $1.23
 									"currency" => "usd",
 									"card" => $token,
 									"description" => $buyerEmail
@@ -53,7 +58,7 @@ if ($_POST) {
 		$msg .= "<strong>First Name:</strong> ".$firstName."<BR>";
 		$msg .= "<strong>Last Name:</strong> ".$lastName."<BR>";
 		$msg .= "<strong>Email:</strong> ".$buyerEmail."<BR>";
-		$msg .= "<strong>Purchase Amount:</strong> ".$purchaseAmount."<BR>";
+		$msg .= "<strong>Purchase Amount:</strong> ".$purchaseAmount4Display."<BR>";
 		$msg .= "<strong>Card Type:</strong> ".$cardType."<BR>";
 		$msg .= "<strong>Last 4 Digit of Credit Card:</strong> ".$cardLast4Digits."<BR>";
 		$headers = "MIME-Version: 1.0" . " \r\n";
@@ -66,7 +71,7 @@ if ($_POST) {
 		$from = $sellerEmail;
 		$to = $buyerEmail;
 		$Subject = "Thank You For Your Purchase!";
-		$msg = "<strong>Amount Paid:</strong> ".$purchaseAmount."<BR>";
+		$msg = "<strong>Amount Paid:</strong> ".$purchaseAmount4Display."<BR>";
 		$msg .= "Congratulations! Your transaction was successful. You can now view or download your ebook from the below link:<BR>";
 		$msg .= $downloadLink."<BR>";
 		
@@ -215,7 +220,7 @@ if ($_POST) {
 
         		<div class="header">
 						<h3 class="offer">Limited Time Special</h3> 
-						<p class="price"><span class="was"><strike>Original Price: $9.95</strike></span><br><span class="now">Now Only: $5.95</span></p>
+						<p class="price"><span class="was"><strike>Original Price: <?php echo $originalAmount4Display ?></strike></span><br><span class="now">Now Only: <?php echo $purchaseAmount4Display ?></span></p>
 						</div><!--END header-->
 
 						<div class="body">
