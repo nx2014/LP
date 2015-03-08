@@ -1,7 +1,7 @@
     //jQuery is used only for this example; it isn't required to use Stripe 
 
 	// this identifies your website in the createToken call below
-	Stripe.setPublishableKey('pk_test_4L13r8dLhN7f8io5MWkK9u3p');//Change here: your Stripe live public key
+	Stripe.setPublishableKey('pk_test_4L13r8dLhN7f8io5MWkK9u3p');//Change here: your Stripe live Publishable Key, pk_live_XXXXXXXXXXXXXXXXXXXXXXXX
 	 
 	function testClick() {
 		//alert("alert from testClick:"+$('.emailInput').val());

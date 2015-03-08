@@ -24,6 +24,7 @@ $sellerEmail = "enterYourEmailHere"; //Sells email to receive leads
 $MailChimp = new \Drewm\MailChimp('enterYourMailChimpApiKeyHere'); //Change MailChimp API Key here, XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-us9
 $MailChimpListID = "enterYourListIdHere";//Mailing list ID here, XXXXXXXXXX
 Stripe::setApiKey("enterYourStripeApiKeyHere"); //Stripe API key, sk_live_XXXXXXXXXXXXXXXXXXXXXXXX
+$GoogleSiteID = "UA-12345-X"; //Change UA-XXXXX-X to be your site's ID.
 //User changes end
 
 $originalAmount4Display = "$".substr_replace($originalAmountByCents, ".", -2, 0);
@@ -321,7 +322,7 @@ if ($_POST) {
 	      </section>
 	      </div><!--END container-->
 				<footer>
-	        <div class="container">YourDomain.com &copy; <?php echo date("Y"); ?> - All rights reserved | <a data-toggle="modal" data-target="#privacyModal">Privacy Policy</a> | <a data-toggle="modal" data-target="#termsModal">Terms & Conditions</a></div>
+	        <div class="container">&copy; <?php echo date("Y"); ?> - All rights reserved | <a data-toggle="modal" data-target="#privacyModal">Privacy Policy</a> | <a data-toggle="modal" data-target="#termsModal">Terms & Conditions</a></div>
 	      </footer>
 
 		<!--preview Modal-->
@@ -395,18 +396,18 @@ if ($_POST) {
 		<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
         <script src="./libs/bootstrap/js/bootstrap.js"></script>
         <script src="js/plugins.js"></script>
-        <script src="js/wt-main.js"></script>
+        <script src="js/main.js"></script>
 
 
 
-<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+<!-- Google Analytics -->
 <script>
 	(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
 	function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
 	e=o.createElement(i);r=o.getElementsByTagName(i)[0];
 	e.src='//www.google-analytics.com/analytics.js';
 	r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-	ga('create','UA-XXXXX-X');ga('send','pageview');
+	ga('create',<?php echo $GoogleSiteID ?>);ga('send','pageview');
 </script>
 
 
