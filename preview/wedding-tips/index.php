@@ -1,26 +1,64 @@
+<!--Digital Book Sellers - Wedding Tips Version 03.07.15
+
+- Added PHP Current Year
+- Added Loader.gif
+
+-->
+
 <?php
-require 'stripe-php-1.16.0/lib/Stripe.php';
+require './libs/stripe-php-1.16.0/lib/Stripe.php';
+include "./libs/MailChimp/MailChimp.php";
 
 $month=date('m');
 $year=date("Y");
-//$month="05";//testing
-//$year="2017"; //testing
 
 $isSuccessShow = "false";
 $isSuccess = "";
 $error = "";
 
-$originalAmountByCents = 295; //Change here: original amount in cents, e.g 995
-$purchaseAmountByCents = 195; //Change here: purchase amount in cents, e.g 595
+/*
+//User change here
+$originalAmountByCents = 895; //Change here: original amount in cents, $8.95 would be 895
+$purchaseAmountByCents = 595; //Change here: purchase amount in cents, $5.95 would be 595. This is the real amount charged using Stripe
+$downloadLink = "enterYourDownloadUrlHere"; // Your digital book download url, must be valid url, otherwise buyer won't receive email
+$sellerEmail = "enterYourEmailHere"; //Sells email to receive leads
+$MailChimp = new \Drewm\MailChimp('enterYourMailChimpApiKeyHere'); //Change MailChimp API Key here, XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-us9
+$MailChimpListID = "enterYourListIdHere";//Mailing list ID here, XXXXXXXXXX
+Stripe::setApiKey("enterYourStripeApiKeyHere"); //Stripe API key, sk_live_XXXXXXXXXXXXXXXXXXXXXXXX
+*/
+
+/* for testing */
+$originalAmountByCents = 895; //Change here: original amount in cents, $8.95 would be 895
+$purchaseAmountByCents = 50; //Change here: purchase amount in cents, $5.95 would be 595. This is the real amount charged using Stripe
+$downloadLink = "http://www.google.com"; // Your digital book download url, must be valid url, otherwise buyer won't receive email
+$sellerEmail = "rongxia2014@gmail.com"; //
+$MailChimp = new \Drewm\MailChimp('3e2074c3da2d0262d35926048bdc6cae-us9'); //
+$MailChimpListID = "4c703dc232";//
+Stripe::setApiKey("sk_test_4L13Yi3xCJ0hOB3BIiVE2TFU");//
+//form inputs
+$form_email="rongxia123@gmail.com";
+$form_firstName="Rong";
+$form_lastName="Xia";
+$form_creditCardNumber="4242424242424242";
+$month="9";
+$year="2016";
+$form_cvcCode="123";
+/**/
+
 
 $originalAmount4Display = "$".substr_replace($originalAmountByCents, ".", -2, 0);
-$purchaseAmount4Display = "$".substr_replace($purchaseAmountByCents, ".", -2, 0);
-
+$purchaseAmount4Display = "$";
+if($purchaseAmountByCents<10) {
+	$purchaseAmount4Display = "$00".$purchaseAmountByCents;
+} else if($purchaseAmountByCents<100) {
+	$purchaseAmount4Display = "$0".$purchaseAmountByCents;
+} else {
+	$purchaseAmount4Display = "$".$purchaseAmountByCents;
+}	
+$purchaseAmount4Display = substr_replace($purchaseAmount4Display, ".", -2, 0);
+	
 if ($_POST) {
-	Stripe::setApiKey("sk_test_4L13Yi3xCJ0hOB3BIiVE2TFU");//rx test
-	//Stripe::setApiKey("sk_live_mDfQRiYW1k5qLC7QjS6i22No");//nuo live
 
-	$downloadLink = "www.abcdefg.com"; // Hardcode download link here. Each seller has a different link.
 	try {
 		//submit payment charge request
 		if (!isset($_POST['stripeToken'])) {
@@ -29,9 +67,6 @@ if ($_POST) {
 		
 		$isSuccessShow = 'true';
 		$isSuccess = 'false';
-		
-		//sells email
-		$sellerEmail = "rongxia2014@gmail.com"; 
 		
 		$firstName = trim($_POST['hiddenFirstName']);
 		$lastName = trim($_POST['hiddenLastName']);
@@ -84,11 +119,9 @@ if ($_POST) {
 		$subscribeMailChimp = trim($_POST['hiddenSubscribeMailChimp']);
 		error_log("subscribeMailChimp:".$subscribeMailChimp);
 		if($subscribeMailChimp == "Y") {
-			include "./libs/MailChimp/MailChimp.php";
 			//find API key at MailChimp site, dropdown account/Extras/API keys
-			$MailChimp = new \Drewm\MailChimp('3e2074c3da2d0262d35926048bdc6cae-us9'); //Change MailChimp API Key here
 			$result = $MailChimp->call('lists/subscribe', array(
-                'id'            => '4c703dc232',  //Change list ID here, e.g 4c703dc232 for "TestGroup"
+                'id'            => $MailChimpListID,
                 'email'         => array('email'=>$buyerEmail),
                 'merge_vars'    => array('FNAME'=>$firstName, 'LNAME'=>$lastName),
 				'double_optin'  => false  
@@ -105,13 +138,6 @@ if ($_POST) {
 	}
 }
 ?>
-
-
-<!--Digital Book Sellers - Wedding Tips Version 02.21.15
-
-- Updated to licensed images
-
--->
 
 
 <!DOCTYPE html>
@@ -132,7 +158,7 @@ if ($_POST) {
     <link href='http://fonts.googleapis.com/css?family=Bangers' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Dancing+Script' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="./libs/bootstrap/css/bootstrap.css">
     <link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
     <link rel="shortcut icon" href="favicon.ico">
@@ -237,7 +263,7 @@ if ($_POST) {
 
 									<div class="email form-row form-group">
 										<label>Where to send the ebook?</label>
-										<input class="emailInput clearMeFocus form-control" id="email" type="text" size="20" value="rongxia123@gmail.com" placeholder="Your Email Address" data-stripe="email"/>
+										<input class="emailInput clearMeFocus form-control" id="email" type="text" size="20" value="<?php echo $form_email ?>" placeholder="Your Email Address" data-stripe="email"/>
 									</div>
 
 									<label>Credit Card Information</label><div class="cc pull-right"><img src="img/cc.png" width="125"></div>
@@ -247,13 +273,13 @@ if ($_POST) {
 										Transactions are performed securely by Stripe Checkout
 									</div>
 									<div class="fullName form-row">
-										<input class="firstName clearMeFocus form-control" id="firstName" type="text" size="20" value="r" placeholder="First Name">
-										<input class="lastName clearMeFocus form-control" id="lastName" type="text" size="20" value="x" placeholder="Last Name">
+										<input class="firstName clearMeFocus form-control" id="firstName" type="text" size="20" value="<?php echo $form_firstName ?>" placeholder="First Name">
+										<input class="lastName clearMeFocus form-control" id="lastName" type="text" size="20" value="<?php echo $form_lastName ?>" placeholder="Last Name">
 									</div>
 									<div class="clearfix"></div>									
 
 									<div class="number form-row">
-										<input type="text" size="20" autocomplete="off" id="creditCardNumber" class="card-number cardNumberInput clearMeFocus form-control" value="4242424242424242" placeholder="Credit Card Number" data-stripe="number"/>
+										<input type="text" size="20" autocomplete="off" id="creditCardNumber" class="card-number cardNumberInput clearMeFocus form-control" value="<?php echo $form_creditCardNumber ?>" placeholder="Credit Card Number" data-stripe="number"/>
 									</div>
 
 									<div class="expiration form-row">
@@ -282,12 +308,15 @@ if ($_POST) {
 									</div>
 
 									<div class="cvc form-row">
-										<input type="text" size="4" autocomplete="off" id="cvcCode" class="card-cvc cvcInput clearMeFocus form-control" value="123" placeholder="CVC Code" data-stripe="cvc"/>
+										<input type="text" size="4" autocomplete="off" id="cvcCode" class="card-cvc cvcInput clearMeFocus form-control" value="<?php echo $form_cvcCode ?>" placeholder="CVC Code" data-stripe="cvc"/>
+									</div>
+									<div class="clearfix"></div>
+									<div class="checkbox form-row">
+										<label>
+											<input type="checkbox" align="left" id="subscribeMailChimp" value="Y" checked />Subscribe to newsletter
+										</label>
 									</div>
 									
-									<div><input type="checkbox" align="left" id="subscribeMailChimp" value="Y" checked />Subscribe mailchimp</div>
-									
-									<!-- <button type="submit" class="submit-button btn btn-primary" onClick="sendMail()">Get Instant Access &rarr;</button> -->
 									<button type="submit" class="submit-button btn btn-primary" id="submitBtn">
 										<div id="sendText">Get Instant Access &rarr;</div><img src="img/loader.gif" style="display:none" id="submitBtnImg" >
 									</button>
@@ -312,7 +341,7 @@ if ($_POST) {
 	      </section>
 	      </div><!--END container-->
 				<footer>
-	        <div class="container">YourDomain.com Copyright 2014, all rights reserved. | <a data-toggle="modal" data-target="#privacyModal">Privacy Policy</a> | <a data-toggle="modal" data-target="#termsModal">Terms & Conditions</a></div>
+	        <div class="container">YourDomain.com &copy; <?php echo date("Y"); ?> - All rights reserved | <a data-toggle="modal" data-target="#privacyModal">Privacy Policy</a> | <a data-toggle="modal" data-target="#termsModal">Terms & Conditions</a></div>
 	      </footer>
 
 		<!--preview Modal-->
@@ -384,7 +413,7 @@ if ($_POST) {
 		<script type="text/javascript" src="https://js.stripe.com/v1/"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
-        <script src="bootstrap/js/bootstrap.js"></script>
+        <script src="./libs/bootstrap/js/bootstrap.js"></script>
         <script src="js/plugins.js"></script>
         <script src="js/wt-main.js"></script>
 
