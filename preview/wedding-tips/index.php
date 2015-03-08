@@ -16,8 +16,7 @@ $isSuccessShow = "false";
 $isSuccess = "";
 $error = "";
 
-/*
-//User change here
+//User changes begin
 $originalAmountByCents = 895; //Change here: original amount in cents, $8.95 would be 895
 $purchaseAmountByCents = 595; //Change here: purchase amount in cents, $5.95 would be 595. This is the real amount charged using Stripe
 $downloadLink = "enterYourDownloadUrlHere"; // Your digital book download url, must be valid url, otherwise buyer won't receive email
@@ -25,26 +24,7 @@ $sellerEmail = "enterYourEmailHere"; //Sells email to receive leads
 $MailChimp = new \Drewm\MailChimp('enterYourMailChimpApiKeyHere'); //Change MailChimp API Key here, XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-us9
 $MailChimpListID = "enterYourListIdHere";//Mailing list ID here, XXXXXXXXXX
 Stripe::setApiKey("enterYourStripeApiKeyHere"); //Stripe API key, sk_live_XXXXXXXXXXXXXXXXXXXXXXXX
-*/
-
-/* for testing */
-$originalAmountByCents = 895; //Change here: original amount in cents, $8.95 would be 895
-$purchaseAmountByCents = 50; //Change here: purchase amount in cents, $5.95 would be 595. This is the real amount charged using Stripe
-$downloadLink = "http://www.google.com"; // Your digital book download url, must be valid url, otherwise buyer won't receive email
-$sellerEmail = "rongxia2014@gmail.com"; //
-$MailChimp = new \Drewm\MailChimp('3e2074c3da2d0262d35926048bdc6cae-us9'); //
-$MailChimpListID = "4c703dc232";//
-Stripe::setApiKey("sk_test_4L13Yi3xCJ0hOB3BIiVE2TFU");//
-//form inputs
-$form_email="rongxia123@gmail.com";
-$form_firstName="Rong";
-$form_lastName="Xia";
-$form_creditCardNumber="4242424242424242";
-$month="9";
-$year="2016";
-$form_cvcCode="123";
-/**/
-
+//User changes end
 
 $originalAmount4Display = "$".substr_replace($originalAmountByCents, ".", -2, 0);
 $purchaseAmount4Display = "$";
