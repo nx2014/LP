@@ -24,7 +24,7 @@ $sellerEmail = "enterYourEmailHere"; //Sells email to receive leads
 $MailChimp = new \Drewm\MailChimp('enterYourMailChimpApiKeyHere'); //Change MailChimp API Key here, XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-us9
 $MailChimpListID = "enterYourListIdHere";//Mailing list ID here, XXXXXXXXXX
 Stripe::setApiKey("enterYourStripeApiKeyHere"); //Stripe API key, sk_live_XXXXXXXXXXXXXXXXXXXXXXXX
-$GoogleSiteID = "UA-12345-X"; //Change UA-XXXXX-X to be your site's ID.
+$GoogleSiteID = "UA-XXXXX-X"; //Change UA-XXXXX-X to be your site's ID.
 //User changes end
 
 $originalAmount4Display = "$".substr_replace($originalAmountByCents, ".", -2, 0);
@@ -262,30 +262,38 @@ if ($_POST) {
 									<div class="number form-row">
 										<input type="text" size="20" autocomplete="off" id="creditCardNumber" class="card-number cardNumberInput clearMeFocus form-control" value="<?php echo $form_creditCardNumber ?>" placeholder="Credit Card Number" data-stripe="number"/>
 									</div>
-
-									<div class="expiration form-row">
-										<select class="form-control card-expiry-month monthInput" data-stripe="exp-month">
-												<option value="1" <?PHP if($month==1) echo "selected";?>>January</option>
-												<option value="2" <?PHP if($month==2) echo "selected";?>>February</option>
-												<option value="3" <?PHP if($month==3) echo "selected";?>>March</option>
-												<option value="4" <?PHP if($month==4) echo "selected";?>>April</option>
-												<option value="5" <?PHP if($month==5) echo "selected";?>>May</option>
-												<option value="6" <?PHP if($month==6) echo "selected";?>>June</option>
-												<option value="7" <?PHP if($month==7) echo "selected";?>>July</option>
-												<option value="8" <?PHP if($month==8) echo "selected";?>>August</option>
-												<option value="9" <?PHP if($month==9) echo "selected";?>>September</option>
-												<option value="10" <?PHP if($month==10) echo "selected";?>>October</option>
-												<option value="11" <?PHP if($month==11) echo "selected";?>>November</option>
-												<option value="12" <?PHP if($month==12) echo "selected";?>>December</option>
-										</select>
-										<select class="form-control card-expiry-year yearInput" data-stripe="exp-year">
-												<?PHP for($i=date("Y"); $i<=date("Y")+2; $i++)
-												if($year == $i)
-													echo "<option value='$i' selected>$i</option>";
-												else
-													echo "<option value='$i'>$i</option>";
-												?>
-										</select>
+									<div class="form-inline expiration form-row">
+										<div class="form-group expMonth">
+											<label class="monthLabel form-control hidden-md hidden-xs"><abbr title="Expiration Month">Exp. Month:</abbr></label>
+											<select class="form-control card-expiry-month monthInput" data-stripe="exp-month">
+													<option value="1" <?PHP if($month==1) echo "selected";?>>01</option>
+													<option value="2" <?PHP if($month==2) echo "selected";?>>02</option>
+													<option value="3" <?PHP if($month==3) echo "selected";?>>03</option>
+													<option value="4" <?PHP if($month==4) echo "selected";?>>04</option>
+													<option value="5" <?PHP if($month==5) echo "selected";?>>05</option>
+													<option value="6" <?PHP if($month==6) echo "selected";?>>06</option>
+													<option value="7" <?PHP if($month==7) echo "selected";?>>07</option>
+													<option value="8" <?PHP if($month==8) echo "selected";?>>08</option>
+													<option value="9" <?PHP if($month==9) echo "selected";?>>09</option>
+													<option value="10" <?PHP if($month==10) echo "selected";?>>10</option>
+													<option value="11" <?PHP if($month==11) echo "selected";?>>11</option>
+													<option value="12" <?PHP if($month==12) echo "selected";?>>12</option>
+											</select>
+											<div class="clearfix"></div>
+										</div>
+										<div class="form-group expYear">
+											<label class="yearLabel form-control hidden-md hidden-xs"><abbr title="Expiration Year">Exp. Year:</abbr></label>
+											<select class="form-control card-expiry-year yearInput" data-stripe="exp-year">
+													<?PHP for($i=date("Y"); $i<=date("Y")+19; $i++)
+													if($year == $i)
+														echo "<option value='$i' selected>$i</option>";
+													else
+														echo "<option value='$i'>$i</option>";
+													?>
+											</select>
+											<div class="clearfix"></div>
+										</div>
+										<div class="clearfix"></div>
 									</div>
 
 									<div class="cvc form-row">
