@@ -116,6 +116,7 @@ if ($_POST) {
 		}
 	} catch (Exception $e) {
 		$error = $e->getMessage();
+		error_log($error);
 	}
 }
 ?>

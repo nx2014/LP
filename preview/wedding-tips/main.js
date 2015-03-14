@@ -27,7 +27,18 @@
 
 		return "";
 	}	
-
+	
+	function toggleSubmitBtn(status) {
+		if("disable" == status) {
+			document.getElementById("sendText").innerHTML = "";
+			document.getElementById("submitBtnImg").style.display = "";
+			document.getElementById("submitBtn").disabled = true;			
+		} else if("enable" == status) {
+			document.getElementById("sendText").innerHTML = "Get Instant Access &rarr;";
+			document.getElementById("submitBtnImg").style.display = "none";
+			document.getElementById("submitBtn").disabled = false;	
+		}
+	}
 	
 	function stripeResponseHandler(status, response) {
 
@@ -37,6 +48,9 @@
 			// show the errors on the form
 			$(".payment-errors").html(response.error.message);
 			$("div#errMsg").css('display','block');
+			
+			toggleSubmitBtn("enable");
+			
 		} else {
 			var form$ = $("#payment-form");
 			// token contains id, last4, and card type
@@ -161,10 +175,7 @@
 			}
 
 			// disable the submit button to prevent repeated clicks
-			//$('.submit-button').attr("disabled", "disabled");
-			document.getElementById("sendText").innerHTML = "";
-			document.getElementById("submitBtnImg").style.display = "";
-			document.getElementById("submitBtn").disabled = true;			
+			toggleSubmitBtn("disable");
 			 
 			// createToken returns immediately - the supplied callback submits the form if there are no errors
 			Stripe.createToken({
