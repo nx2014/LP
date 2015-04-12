@@ -1,31 +1,92 @@
 <?php
-function sendMail(){
-	$firstName = trim($_GET['firstName']);
-	$lastName = trim($_GET['lastName']);
-	$email = trim($_GET['email']);	
-	$phoneNo = trim($_GET['phoneNo']);
-	$addr = trim($_GET['addr']);
-	
-	$str = "ERR";
-	$msg .="<p>Congratulations! You have just received a new lead from your landing page. Information user entered are below:</p>";
-	$msg .="<p><strong>First Name: </strong>".$firstName."</p><p><strong>Last Name: </strong>".$lastName."</p><p><strong>Phone Number: </strong>".$phoneNo."</p><p><strong>Email: </strong>".$email."</p><p><strong>Address: </strong>".$addr."</p>";
-	$to = "kikix2125@gmail.com";
-	$Subject = "New Lead From Your Landing Page";
-	$from = "DoNotReply <donotreply@landingpageburger.com>";
-	// Always set content-type when sending HTML email
-	$headers .= "MIME-Version: 1.0" . " \r\n";
-	$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-	$headers .= "From: ".$from." \r\n";
-	if(mail($to,$Subject,$msg,$headers)){
-		$str = "OK";								   
-	}
-	return $str."~";exit;
-}
+include "./libs/MailChimp/MailChimp.php";
 
-switch($_GET['xAction']){
-	case 'sendMail':
-	echo sendMail();
-	break;
+$isSuccessShow = "false";
+$isSuccess = "";
+$error = "";
+
+//User changes begin
+$sellerEmail = "enterYourEmailHere"; //Sells email to receive leads
+//$MailChimp = new \Drewm\MailChimp('enterYourMailChimpApiKeyHere'); //Change MailChimp API Key here, XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-us9
+$MailChimpListID = "enterYourListIdHere";//Mailing list ID here, XXXXXXXXXX
+$GoogleSiteID = "UA-XXXXX-X"; //Change UA-XXXXX-X to be your site's ID.
+//User changes end
+
+///* testing block
+$sellerEmail = "rongxia2014@gmail.com"; //
+$MailChimp = new \Drewm\MailChimp('3e2074c3da2d0262d35926048bdc6cae-us9'); // need to comment User change block, then MailChimp can work
+$MailChimpListID = "4c703dc232";//
+//form inputs
+$form_email="rongxia123@gmail.com";
+$form_firstName="Rong001";
+$form_lastName="Xia002";
+$form_phoneNumber="2011231234";
+$form_propertyAddress="123 main street, new york city, NY 10001";
+
+//*/
+
+if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
+
+	try {
+		$isSuccessShow = 'true';
+		$isSuccess = 'false';
+		
+		$firstName = trim($_POST['firstName']);
+		$lastName = trim($_POST['lastName']);
+		$buyerEmail = trim($_POST['email']);
+		$buyerPhoneNo = trim($_POST['phoneNo']);
+		$buyerAddress = trim($_POST['address']);
+		
+		//send email to seller
+		$from = "DoNotReply <donotreply@landingpageburger.com>";
+		$to = $sellerEmail; 
+		$Subject = "New Purchase From Your Landing Page";
+		$msg = "Congratulations! You have a new purchase form your landing page. Details from this purchase are below:<BR><BR>";
+		$msg .= "<strong>First Name:</strong> ".$firstName."<BR>";
+		$msg .= "<strong>Last Name:</strong> ".$lastName."<BR>";
+		$msg .= "<strong>Email:</strong> ".$buyerEmail."<BR>";
+		$msg .= "<strong>Phone Number:</strong> ".$buyerPhoneNo."<BR>";
+		$msg .= "<strong>Address:</strong> ".$buyerAddress."<BR>";
+		$headers = "MIME-Version: 1.0" . " \r\n";
+		$headers .= "Content-type:text/html;charset=UTF-8\r\n";
+		$headers .= "From: ".$from." \r\n";
+
+		$sentToSeller = mail($to,$Subject,$msg,$headers);
+
+		//send email to buyer
+		$from = $sellerEmail;
+		$to = $buyerEmail;
+		$Subject = "Thank You For Your Purchase!";
+		$msg = "<strong>Thanks for your inquiry</strong><BR>";
+		$msg .= "Congratulations! Your ... <BR>";
+		
+		$headers = "MIME-Version: 1.0\r\n";
+		$headers .= "Content-type:text/html;charset=UTF-8\r\n";
+		$headers .= "From: ".$from."\r\n";
+		$sentToBuyer = mail($to,$Subject,$msg,$headers);
+
+		//MailChimp integration, transaction success doesn't depend on this subscription
+		$subscribeMailChimp = trim($_POST['subscribeMailChimp']);
+		error_log("subscribeMailChimp:".$subscribeMailChimp);
+		if($subscribeMailChimp == "Y") {
+			//find API key at MailChimp site, dropdown account/Extras/API keys
+			$result = $MailChimp->call('lists/subscribe', array(
+                'id'            => $MailChimpListID,
+                'email'         => array('email'=>$buyerEmail),
+                'merge_vars'    => array('FNAME'=>$firstName, 'LNAME'=>$lastName),
+				'double_optin'  => false  
+            ));
+			error_log("subscribe MailChimp result:".$result);
+		}
+		
+		//to show confirmation modal
+		if($sentToSeller && $sentToBuyer){
+			$isSuccess = 'true';						   
+		}
+	} catch (Exception $e) {
+		$error = $e->getMessage();
+		error_log($error);
+	}
 }
 ?>
 
@@ -49,15 +110,49 @@ switch($_GET['xAction']){
         <link href='http://fonts.googleapis.com/css?family=Droid+Serif:700,400' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="css/normalize.css">
-        <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" href="./libs/bootstrap/css/bootstrap.css">
         <link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
         <link rel="stylesheet" href="css/main.css">
         <link rel="shortcut icon" href="favicon.ico">
 
-        
-        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
-    </head>
+	</head>
     <body>
+		<input type="hidden" class="modelResultStatusShow" value="<?php echo $isSuccessShow; ?>" />
+		<input type="hidden" class="modelResultStatus" value="<?php echo $isSuccess; ?>" />
+		<div class="modal fade success modalSuccess">
+			<div class="modal-dialog">
+				<div class="modal-content">
+				  <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title">Thank You For Your Purchase</h4>
+				  </div>
+				  <div class="modal-body">
+	                <p>Congratulations! Your transaction was succesful. You can now view or download your ebook from the below link:</p>
+	                thanks ...
+	              </div>
+				  <div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				  </div>
+				</div>
+			</div>
+		</div>	
+		<div class="modal fade failed modalFailed">
+			<div class="modal-dialog">
+				<div class="modal-content">
+				  <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title">Your Inquiry NOT Sent</h4>
+				  </div>
+				  <div class="modal-body">
+					<p>Please try again.</p>
+				  </div>
+				  <div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				  </div>
+				</div>
+			</div>
+		</div>		
+	
       <div class="wrap">
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -79,9 +174,9 @@ switch($_GET['xAction']){
 
                     <p>Financial freedom could finally be within your grasp. Get in touch today to find out what options you have – what have you got to lose?</p> 
                     <p class="clearfix"></p>
-                    <h3 class="strong">Couple signs that your property have increased in value:</h3>
+                    <h3 class="strong">A few signs that your property have increased in value:</h3>
                     <ul>
-                      <li><span class="glyphicon glyphicon-ok important"></span> Asian population in your neighborhood increased</li>
+                      <li><span class="glyphicon glyphicon-ok important"></span> Increased population in your neighborhood</li>
                       <li><span class="glyphicon glyphicon-ok important"></span> High rating school district</li>
                       <li><span class="glyphicon glyphicon-ok important"></span> Increasing in corporate offices</li>
                       <li><span class="glyphicon glyphicon-ok important"></span> Rent increase</li>
@@ -97,39 +192,45 @@ switch($_GET['xAction']){
 
                     <div class="body">
                         <!--contact form begin-->
-                        <form action="#" method="POST" id="frmForm">
+                        <form action="" method="POST" id="mainForm">
                           <div id="errMsg" class="alert alert-danger"></div>
  
                           <p>Tell us something about you:</p>
 
                           <div class="firstName form-row">
-                            <input class="firstNameInput clearMeFocus" id="firstName" type="text" size="4" value="First Name" required>
+                            <input class="firstNameInput clearMeFocus" id="firstName" name="firstName" type="text" size="4" value="<?php echo $form_firstName ?>" placeholder="First Name">
                           </div>
 
                           <div class="lastName form-row">
-                            <input class="lastNameInput clearMeFocus" id="lastName" type="text" size="4" value="Last Name" required>
+                            <input class="lastNameInput clearMeFocus" id="lastName" name="lastName" type="text" size="4" value="<?php echo $form_lastName ?>" placeholder="Last Name">
                           </div>
 
                           <div class="email form-row">
-                            <input class="emailInput clearMeFocus" id="email" type="text" size="20" value="Email" required>
+                            <input class="emailInput clearMeFocus" id="email" name="email" type="text" size="20" value="<?php echo $form_email ?>" placeholder="Your Email Address">
                           </div>
 
                           <div class="phone form-row">
-                            <input class="phoneInput clearMeFocus" id="phoneNo" type="text" size="20" value="Phone Number" required>
+                            <input class="phoneInput clearMeFocus" id="phoneNo" name="phoneNo" type="text" size="20" value="<?php echo $form_phoneNumber ?>" placeholder="Phone Number">
                           </div>
 
                           <p>What is the address of your property?</p>
 
                           <div class="address form-row">
-                            <input class="addressInput clearMeFocus" id="address" type="text" size="20" value="Property Address" required>
+                            <input class="addressInput clearMeFocus" id="address" name="address" type="text" size="20" value="<?php echo $form_propertyAddress ?>" placeholder="Property Address">
                           </div>
 
                           <div class="clearfix"></div>
-
-                          <button type="button" class="btn btn-primary" id="btn-submit" onClick="sendMail()">Get FREE Advice</button>
-                          
+							<div class="checkbox form-row">
+								<label>
+									<input type="checkbox" align="left" id="subscribeMailChimp" name="subscribeMailChimp" value="Y" checked />Subscribe to newsletter
+								</label>
+							</div>
+							<button type="submit" class="submit-button btn btn-primary" id="submitBtn">
+								<div id="sendText">Get FREE Advice &rarr;</div><img src="img/loader.gif" style="display:none" id="submitBtnImg" >
+							</button>
+									
                         </form>
-                        <!--stripe form end-->
+                        <!--contact form end-->
                     </div><!--END body-->
 
                     <div class="guaranteed text-center">
@@ -183,7 +284,7 @@ switch($_GET['xAction']){
                 <a href="#"><i class="fa fa-twitter-square"></i></a>
                 <a href="#"><i class="fa fa-linkedin-square"></i></a>
               </div>
-              <p class="pull-left">YourDomain.com Copyright 2014, all rights reserved. | <a data-toggle="modal" data-target="#privacyModal">Privacy Policy</a> | <a data-toggle="modal" data-target="#termsModal">Terms & Conditions</a></p>
+              <p class="pull-left">YourDomain.com Copyright 2015, all rights reserved. | <a data-toggle="modal" data-target="#privacyModal">Privacy Policy</a> | <a data-toggle="modal" data-target="#termsModal">Terms & Conditions</a></p>
             </div>
         </footer>
 
@@ -234,7 +335,7 @@ switch($_GET['xAction']){
 
       <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>          
       <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
-      <script src="bootstrap/js/bootstrap.js"></script>
+      <script src="./libs/bootstrap/js/bootstrap.js"></script>
       <script src="js/plugins.js"></script>
       <script src="js/main.js"></script>
          <!-- Google Analytics: change UA-XXXXX-X to be your site's ID.  -->
