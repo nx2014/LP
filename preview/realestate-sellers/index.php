@@ -127,7 +127,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
 					<h4 class="modal-title">Thank You For Your Purchase</h4>
 				  </div>
 				  <div class="modal-body">
-	                <p>Congratulations! Your transaction was succesful. You can now view or download your ebook from the below link:</p>
+	                <p>Congratulations! Your transaction was successful. You can now view or download your ebook from the below link:</p>
 	                thanks ...
 	              </div>
 				  <div class="modal-footer">

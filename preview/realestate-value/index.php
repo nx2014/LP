@@ -1,3 +1,105 @@
+<?php
+include "./libs/MailChimp/MailChimp.php";
+
+$isSuccessShow = "false";
+$isSuccess = "";
+$error = "";
+
+$sellerEmail = "rongxia2014@gmail.com"; //
+$MailChimp = new \Drewm\MailChimp('3e2074c3da2d0262d35926048bdc6cae-us9'); // need to comment User change block, then MailChimp can work
+$MailChimpListID = "4c703dc232";//
+
+//form inputs
+/*
+$form_streetAddress="123 main street";
+$form_suiteNumber="168";
+$form_city="new york city";
+$form_state="NY";
+$form_zipCode="10001";
+
+$form_email="rongxia123@gmail.com";
+$form_firstName="Rong001";
+$form_lastName="Xia002";
+$form_phoneNumber="2011231234";
+*/
+
+if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
+
+	try {
+		$isSuccessShow = 'true';
+		$isSuccess = 'false';
+
+		$buyerStreetAddress = trim($_POST['streetAddress']);
+		$buyerSuiteNumber = trim($_POST['suiteNumber']);
+		$buyerCity = trim($_POST['city']);
+		$buyerState = trim($_POST['state']);
+		$buyerZipCode = trim($_POST['zipCode']);
+		
+		$firstName = trim($_POST['firstName']);
+		$lastName = trim($_POST['lastName']);
+		$buyerEmail = trim($_POST['email']);
+		$buyerPhoneNo = trim($_POST['phoneNo']);
+		
+		//send email to seller
+		$from = "DoNotReply <donotreply@landingpageburger.com>";
+		$to = $sellerEmail; 
+		$Subject = "New Purchase From Your Landing Page";
+		$msg = "Congratulations! You have a new purchase form your landing page. Details from this purchase are below:<BR><BR>";
+		$msg .= "<strong>First Name:</strong> ".$firstName."<BR>";
+		$msg .= "<strong>Last Name:</strong> ".$lastName."<BR>";
+		$msg .= "<strong>Email:</strong> ".$buyerEmail."<BR>";
+		$msg .= "<strong>Phone Number:</strong> ".$buyerPhoneNo."<BR>";
+		$msg .= "<strong>Address:</strong> ".$buyerStreetAddress." #".$buyerSuiteNumber.", ".$buyerCity.", ".$buyerState.", ".$buyerZipCode."<BR>";
+		$headers = "MIME-Version: 1.0" . " \r\n";
+		$headers .= "Content-type:text/html;charset=UTF-8\r\n";
+		$headers .= "From: ".$from." \r\n";
+
+		$sentToSeller = mail($to,$Subject,$msg,$headers);		
+		
+		error_log("sentToSeller:".$sentToSeller);
+		
+		//send email to buyer
+		$from = $sellerEmail;
+		$to = $buyerEmail;
+		$Subject = "Thank You For Your Purchase!";
+		$msg = "<strong>Thanks for your inquiry</strong><BR>";
+		$msg .= "Congratulations! Your ... <BR>";
+		
+		$headers = "MIME-Version: 1.0\r\n";
+		$headers .= "Content-type:text/html;charset=UTF-8\r\n";
+		$headers .= "From: ".$from."\r\n";
+		$sentToBuyer = mail($to,$Subject,$msg,$headers);
+		error_log("sentToBuyer:".$sentToBuyer);
+		
+		//MailChimp integration, transaction success doesn't depend on this subscription
+		$subscribeMailChimp = trim($_POST['subscribeMailChimp']);
+		error_log("subscribeMailChimp:".$subscribeMailChimp);
+		if($subscribeMailChimp == "Y") {
+			//find API key at MailChimp site, dropdown account/Extras/API keys
+			$result = $MailChimp->call('lists/subscribe', array(
+                'id'            => $MailChimpListID,
+                'email'         => array('email'=>$buyerEmail),
+                'merge_vars'    => array('FNAME'=>$firstName, 'LNAME'=>$lastName),
+				'double_optin'  => false  
+            ));
+			error_log("subscribe MailChimp result:".$result);
+		}		
+		
+		//to show confirmation modal
+		if($sentToSeller && $sentToBuyer){
+			$isSuccess = 'true';						   
+		}
+	} catch (Exception $e) {
+		$error = $e->getMessage();
+		error_log($error);
+	}
+}
+
+
+?>
+
+
+
 <!--
   - Combined 2 forms inside 1 form tag
 -->
@@ -17,7 +119,7 @@
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
         <link rel="stylesheet" href="css/normalize.css">
-        <link rel="stylesheet" href="bootstrap-3.2.0-dist/css/bootstrap.css">
+        <link rel="stylesheet" href="./libs/bootstrap/css/bootstrap.css">
         <link rel="stylesheet" href="font-awesome-4.2.0/css/font-awesome.min.css">
         <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Chelsea+Market' rel='stylesheet' type='text/css'>
@@ -27,6 +129,41 @@
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
     </head>
     <body>
+		<input type="hidden" class="modelResultStatusShow" value="<?php echo $isSuccessShow; ?>" />
+		<input type="hidden" class="modelResultStatus" value="<?php echo $isSuccess; ?>" />
+		<div class="modal fade success modalSuccess">
+			<div class="modal-dialog">
+				<div class="modal-content">
+				  <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title">Thank You For Your Purchase</h4>
+				  </div>
+				  <div class="modal-body">
+	                <p>Congratulations! Your transaction was successful. You can now view or download your ebook from the below link:</p>
+	                thanks ...
+	              </div>
+				  <div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				  </div>
+				</div>
+			</div>
+		</div>	
+		<div class="modal fade failed modalFailed">
+			<div class="modal-dialog">
+				<div class="modal-content">
+				  <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title">Your Inquiry NOT Sent</h4>
+				  </div>
+				  <div class="modal-body">
+					<p>Please try again.</p>
+				  </div>
+				  <div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				  </div>
+				</div>
+			</div>
+		</div>		
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -34,23 +171,23 @@
         <!-- Add your site or application content here -->
         <h1 class="mainHeadline text-center">What's The Value Of My Home?</h1>
         <h3 class="subHeadline text-center">Get a thorough evaluation of my home's current value.</h3>
-        <div id="errMsg" class="alert alert-danger"></div>
-
+		
+        <form action="" method="POST" id="mainForm">
+		<div id="errMsg" class="alert alert-danger"></div>
         <div class="forms">
           <div class="submit1">
           <div id="form1">
-            <form>
-              <div class="formContent col-lg-5 col-md-8 col-sm-12 center-block" action="#" method="POST">
-     
+              <div class="formContent col-lg-5 col-md-8 col-sm-12 center-block">
+
                 <h4 class="formTitle text-center">My Property Address</h4>
                   <div class="form-group">
                       <div class="streetAddress col-md-8">
                         <label>Street Address</label>
-                        <input class="streetAddressInput clearMeFocus form-control" id="streetAddress" type="text" size="4" value="" required>
+                        <input class="streetAddressInput clearMeFocus form-control" id="streetAddress" name="streetAddress" type="text" size="4" value="<?php echo $form_streetAddress ?>" placeholder="Street Address" required>
                       </div>
                       <div class="suiteNumber col-md-4">
                         <label>Suite #</label>
-                        <input class="suiteNumberInput clearMeFocus form-control" id="lastName" type="text" size="4" value="">
+                        <input class="suiteNumberInput clearMeFocus form-control" id="suiteNumber" name="suiteNumber" type="text" size="4" value="<?php echo $form_suiteNumber ?>" placeholder="Suite #">
                       </div>
                       <div class="clearfix"></div>
                   </div><!--END form-group-->
@@ -58,12 +195,12 @@
                   <div class="form-group">  
                       <div class="city col-md-4">
                         <label>City</label>
-                        <input class="cityInput clearMeFocus form-control" id="email" type="text" size="20" value="" required>
+                        <input class="cityInput clearMeFocus form-control" id="city" name="city" type="text" size="20" value="<?php echo $form_city ?>" placeholder="City" required>
                       </div>
 
                       <div class="state col-md-4">
                         <label>State</label>
-                        <select class="form-control">
+                        <select class="form-control" name="state">
                           <option value="AL">Alabama</option>
                           <option value="AK">Alaska</option>
                           <option value="AZ">Arizona</option>
@@ -120,7 +257,7 @@
 
                       <div class="zip col-md-4">
                         <label>Zip Code</label>
-                        <input class="zipInput clearMeFocus form-control" id="email" type="text" size="20" value="" required>
+                        <input class="zipInput clearMeFocus form-control" id="zipCode" name="zipCode" type="text" size="20" value="<?php echo $form_zipCode ?>" placeholder="Zip Code">
                       </div>
 
                       <div class="clearfix"></div>
@@ -145,11 +282,11 @@
                 <div class="form-group">
                     <div class="firstName col-md-6">
                       <label>First Name</label>
-                      <input class="firstNameInput clearMeFocus form-control" id="streetAddress" type="text" size="4" value="" required>
+                      <input class="firstNameInput clearMeFocus form-control" id="firstName" name="firstName" type="text" size="4" value="<?php echo $form_firstName ?>" placeholder="First Name" required>
                     </div>
                     <div class="lastName col-md-6">
                       <label>Last Name</label>
-                      <input class="lastNameInput clearMeFocus form-control" id="lastName" type="text" size="4" value="">
+                      <input class="lastNameInput clearMeFocus form-control" id="lastName" name="lastName" type="text" size="4" value="<?php echo $form_lastName ?>" placeholder="Last Name" required>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -157,31 +294,43 @@
                 <div class="form-group">  
                     <div class="email col-md-6">
                       <label>Email</label>
-                      <input class="emailInput clearMeFocus form-control" id="email" type="text" size="20" value="" required>
+                      <input class="emailInput clearMeFocus form-control" id="email" name="email" type="text" size="20" value="<?php echo $form_email ?>" placeholder="Email" required>
                     </div>
                     <div class="phone col-md-6">
                       <label>Phone Number</label>
-                      <input class="phoneInput clearMeFocus form-control" id="email" type="text" size="20" value="" required>
+                      <input class="phoneInput clearMeFocus form-control" id="phoneNo" name="phoneNo"type="text" size="20" value="<?php echo $form_phoneNumber ?>" placeholder="Phone Number">
                     </div>
                     <div class="clearfix"></div>
                 </div><!--END form-group-->
 
+				<div class="checkbox form-row" class="col-md-12">
+					<label>
+						<input type="checkbox" align="left" id="subscribeMailChimp" name="subscribeMailChimp" value="Y" checked />Subscribe to newsletter
+					</label>
+				</div>
+							
                 <div class="col-md-12">
                   <p class="text-center small text-muted">It's possible that a Real Estate Professional will contact you to obtain more information about your home before evaluating your home's value.</p>
                 </div>
 
+				<button type="submit" class="submit-button btn btn-primary center-block" id="submitBtn">
+					<div id="sendText">Send My Report!</div><img src="img/loader.gif" style="display:none" id="submitBtnImg" >
+				</button>				
+				
+				<!--
                 <div class="col-md-12">
-                  <button type="button" class="btn btn-primary center-block" id="btn-submit2" onClick="">Send My Report!</button>
+                  <button type="submit" class="btn btn-primary center-block" id="submitBtn" onClick="">Send My Report!</button>
                 </div>
-
+				-->
+				
                 <div class="clearfix"></div>
 
               </div><!--END formContent-->
 
-            </form>
             </div><!--END form2-->
           </div><!--END submit2-->
         </div><!--END forms-->
+        </form>
 
 
       <div class="footer navbar-fixed-bottom">
@@ -236,9 +385,9 @@
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
- <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+		<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
        
-	   <script src="bootstrap-3.2.0-dist/js/bootstrap.js"></script>
+	   <script src="./libs/bootstrap/js/bootstrap.js"></script>
         <script src="js/plugins.js"></script>
         <script src="js/main.js"></script>
 
